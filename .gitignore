@@ -1,7 +1,7 @@
 # TODOs 
 TODOs.md
-examples/debug.py
-examples/test.py
+SGE_Transformer/examples/debug.py
+SGE_Transformer/examples/test.py
 
 # NumPy saves and videos
 results/
@@ -125,9 +125,9 @@ celerybeat.pid
 # Environments
 .env
 .venv
-env/
+SGE_Transformer/envs/
 venv/
-ENV/
+SGE_Transformer/envs/
 env.bak/
 venv.bak/
 

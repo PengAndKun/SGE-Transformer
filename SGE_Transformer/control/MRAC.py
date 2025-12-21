@@ -1,7 +1,7 @@
 import math
 import numpy as np
 import pybullet as p
-import control as ct
+from SGE_Transformer import control as ct
 from scipy.spatial.transform import Rotation
 from scipy.linalg import solve_lyapunov
 
