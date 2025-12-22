@@ -5,8 +5,8 @@ from SGE_Transformer import control as ct
 from scipy.spatial.transform import Rotation
 from scipy.linalg import solve_lyapunov
 
-from gym_pybullet_drones.control.BaseControl import BaseControl
-from gym_pybullet_drones.utils.enums import DroneModel
+from SGE_Transformer.control.BaseControl import BaseControl
+from SGE_Transformer.utils.enums import DroneModel
 
 
 class MRAC(BaseControl):

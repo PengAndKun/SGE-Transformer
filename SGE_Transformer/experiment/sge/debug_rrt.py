@@ -49,8 +49,8 @@ class BenchmarkConfig:
 
 class DroneActionSpace:
     def __init__(self):
-        self.V_XY = 0.5;
-        self.V_Z = 0.3;
+        self.V_XY = 0.5
+        self.V_Z = 0.3
         self.W_Z = 0.5
         self.actions = {
             0: np.array([0.0, 0.0, 0.0, 0.0]),
