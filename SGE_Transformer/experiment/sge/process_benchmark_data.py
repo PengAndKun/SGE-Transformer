@@ -19,7 +19,7 @@ def process_benchmark_data():
     # ==========================================
     print("\n--- Processing Greedy ---")
     for n in n_values:
-        filename = f"../../data/greedy_{n}_all_episodes.csv"
+        filename = f"../../data_pybullet/greedy_{n}_all_episodes.csv"
 
         if os.path.exists(filename):
             try:
@@ -48,7 +48,7 @@ def process_benchmark_data():
     # ==========================================
     print("\n--- Processing Random ---")
     for n in n_values:
-        filename = f"../../data/random_{n}_all_episodes_results.csv"
+        filename = f"../../data_pybullet/random_{n}_all_episodes_results.csv"
 
         if os.path.exists(filename):
             try:
@@ -77,7 +77,7 @@ def process_benchmark_data():
     # 文件名: rrt_benchmark_results.csv (通常包含所有 Budget)
     # ==========================================
     print("\n--- Processing RRT ---")
-    rrt_filename = "../../data/rrt_benchmark_results.csv"
+    rrt_filename = "../../data_pybullet/rrt_benchmark_results.csv"
     if os.path.exists(rrt_filename):
         try:
             rrt_df = pd.read_csv(rrt_filename)
@@ -104,7 +104,7 @@ def process_benchmark_data():
                     print(f"Processed RRT for Budget {n}: Mean={run_performance.mean():.2f}")
                 else:
                     pass
-                    # print(f"Warning: No RRT data found for Budget {n}")
+                    # print(f"Warning: No RRT data_pybullet found for Budget {n}")
         except Exception as e:
             print(f"Error reading {rrt_filename}: {e}")
     else:
@@ -117,7 +117,7 @@ def process_benchmark_data():
     for n in n_values:
         for m in m_values:
             paths_to_check = [
-                f"../../data/SGE_Batch{m}_Budget{n}.csv",
+                f"../../data_pybullet/SGE_Batch{m}_Budget{n}.csv",
                 f"SGE_Batch{m}_Budget{n}.csv"
             ]
 
@@ -151,9 +151,9 @@ def process_benchmark_data():
     print("\n--- Processing SGE-Random (Ablation) ---")
     for n in n_values:
         for m in m_values:
-            # SGE-Random 通常保存在 data 文件夹下
+            # SGE-Random 通常保存在 data_pybullet 文件夹下
             paths_to_check = [
-                f"../../data/SGE_Random_Batch{m}_Budget{n}.csv",
+                f"../../data_pybullet/SGE_Random_Batch{m}_Budget{n}.csv",
                 f"SGE_Random_Batch{m}_Budget{n}.csv"
             ]
 
@@ -187,7 +187,7 @@ def process_benchmark_data():
     # 5. 生成最终表格
     # ==========================================
     if not summary_data:
-        print("\nNo data found! Please check file paths.")
+        print("\nNo data_pybullet found! Please check file paths.")
         return
 
     final_df = pd.DataFrame(summary_data)
@@ -210,7 +210,7 @@ def process_benchmark_data():
     print("=" * 100)
 
     # 保存结果
-    output_file = "../../data/Final_Benchmark_Statistics.csv"
+    output_file = "../../data_pybullet/Final_Benchmark_Statistics.csv"
     final_df.to_csv(output_file, index=False)
     print(f"\nResult saved to: {output_file}")
 
