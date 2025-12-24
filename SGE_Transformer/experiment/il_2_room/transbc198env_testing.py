@@ -220,12 +220,12 @@ def main():
 
     state_dim = 198
 
-    to_t="50000"
-    n_episode=10000
+    to_t="5000"
+    n_episode=100
 
     test_gpt2bc(state_dim, env, params, device, H, to_train=to_t,n_episode=n_episode)
     test_gptneobc(state_dim, env, params, device, H, to_train=to_t,n_episode=n_episode)
-    test_mambabc(state_dim, env, params, device, H, to_train=to_t,n_episode=n_episode)
+    # test_mambabc(state_dim, env, params, device, H, to_train=to_t,n_episode=n_episode)
 
 
 if __name__ == "__main__":
