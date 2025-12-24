@@ -11,7 +11,7 @@ from gpytorch.kernels import ScaleKernel, MaternKernel
 import dill as pickle
 import matplotlib.pyplot as plt
 import networkx as nx
-import numpy as np
+import numpy as np6
 import torch
 import yaml
 from scipy import optimize as opt
