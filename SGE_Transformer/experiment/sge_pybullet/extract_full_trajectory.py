@@ -69,7 +69,6 @@ class SGEConfig:
     NUM_ELITES: int = 15
 
 
-# [修改] CellNode 显式存储 pos 和 rpy，作为 Ground Truth
 class CellNode:
     def __init__(self, key, snapshot, cumulative_reward, global_step, pos, rpy, parent_key=None,
                  action_from_parent=None):
@@ -77,8 +76,8 @@ class CellNode:
         self.snapshot = snapshot
         self.cumulative_reward = cumulative_reward
         self.global_step = global_step
-        self.pos = pos  # 真实位置
-        self.rpy = rpy  # 真实姿态
+        self.pos = pos
+        self.rpy = rpy
         self.times_selected = 0
         self.parent_key = parent_key
         self.action_from_parent = action_from_parent
@@ -111,21 +110,13 @@ def select_cell_advanced(node_pool: Dict[tuple, CellNode]):
     return candidates[idx]
 
 
-# ==========================================
-# [核心修改] 回溯函数：同时提取 State 和 Action
-# ==========================================
 def reconstruct_full_trajectory(node: CellNode, archive: Dict[tuple, CellNode]):
-    """
-    回溯整条链路，返回：
-    1. actions: 动作序列 [a0, a1, ..., aT]
-    2. states:  真实状态序列 [[x,y,z,r,p,y], ...] (长度比 actions 多 1，包含初始状态)
-    """
     action_sequence = []
     state_sequence = []
 
     current_node = node
 
-    # 先把终点状态加进去
+    # 终点状态
     final_state = list(current_node.pos) + list(current_node.rpy)
     state_sequence.append(final_state)
 
@@ -134,14 +125,12 @@ def reconstruct_full_trajectory(node: CellNode, archive: Dict[tuple, CellNode]):
 
         if current_node.parent_key in archive:
             current_node = archive[current_node.parent_key]
-            # 把父节点的状态加进去
             curr_state = list(current_node.pos) + list(current_node.rpy)
             state_sequence.append(curr_state)
         else:
             print(f"[Error] Parent key {current_node.parent_key} not found!")
             break
 
-    # 反转列表（因为是从终点往回找的）
     return action_sequence[::-1], state_sequence[::-1]
 
 
@@ -162,11 +151,13 @@ def run_extraction_session(num_batches, total_budget, seed, run_id, score_thresh
     action_space.sample()
 
     start_snapshot = env.get_snapshot()
-    start_pos = env.pos[0]
-    start_rpy = env.rpy[0]
+
+    # [核心修复 1] 必须加 .copy()，否则拿到的是内存引用！
+    start_pos = env.pos[0].copy()
+    start_rpy = env.rpy[0].copy()
+
     start_key = get_cell_key(start_pos, 0, config)
 
-    # [修改] 初始化 Root 节点时存入 pos, rpy
     root_node = CellNode(start_key, start_snapshot, 0.0, global_step=0, pos=start_pos, rpy=start_rpy)
     global_archive[start_key] = root_node
     current_batch_seeds = [root_node]
@@ -208,8 +199,10 @@ def run_extraction_session(num_batches, total_budget, seed, run_id, score_thresh
                 current_cum_reward += step_reward_sum
                 if terminated: break
 
-                pos = env.pos[0]
-                rpy = env.rpy[0]  # [修改] 获取当前姿态
+                # [核心修复 2] 必须加 .copy()，否则存储的是死值
+                pos = env.pos[0].copy()
+                rpy = env.rpy[0].copy()
+
                 new_key = get_cell_key(pos, current_global_step, config)
 
                 should_add = False
@@ -220,7 +213,6 @@ def run_extraction_session(num_batches, total_budget, seed, run_id, score_thresh
 
                 if should_add:
                     new_snapshot = env.get_snapshot()
-                    # [修改] 创建节点时存入 pos, rpy
                     new_node = CellNode(
                         new_key, new_snapshot, current_cum_reward,
                         global_step=current_global_step,
@@ -238,20 +230,18 @@ def run_extraction_session(num_batches, total_budget, seed, run_id, score_thresh
 
     env.close()
 
-    # 筛选保存
     candidates = heapq.nlargest(50, list(global_archive.values()), key=lambda n: n.cumulative_reward)
     valid_trajectories = []
 
     for elite_node in candidates:
         if elite_node.cumulative_reward > score_threshold:
-            # [关键] 获取双重数据
             actions, states = reconstruct_full_trajectory(elite_node, global_archive)
 
             traj_info = {
                 "final_reward": elite_node.cumulative_reward,
                 "length": len(actions),
                 "actions": np.array(actions, dtype=np.int32),
-                "states": np.array(states, dtype=np.float32),  # Ground Truth Trajectory
+                "states": np.array(states, dtype=np.float32),
             }
             valid_trajectories.append(traj_info)
 
@@ -261,14 +251,14 @@ def run_extraction_session(num_batches, total_budget, seed, run_id, score_thresh
 def main():
     BATCHES = 10
     BUDGET = 100000
-    REPEATS = 2
+    REPEATS = 30
     SCORE_THRESHOLD = 99.0
-    SAVE_FILE = "sge_full_state_trajectories.pkl"
+    SAVE_FILE = "sge_full_state_trajectories_fixed.pkl"  # 改个名字防止混淆
 
     all_data = {}
     total_count = 0
 
-    print("=== STARTING FULL STATE EXTRACTION ===")
+    print("=== STARTING FULL STATE EXTRACTION (FIXED) ===")
 
     for i in range(REPEATS):
         run_id = i + 1
@@ -284,10 +274,11 @@ def main():
         else:
             print(" None.")
 
-    # with open(SAVE_FILE, 'wb') as f:
-    #     pickle.dump(all_data, f)
+    with open(SAVE_FILE, 'wb') as f:
+        pickle.dump(all_data, f)
 
-    print(f"\nSaved {total_count} trajectories (Action + Ground Truth State) to {SAVE_FILE}")
+    print(f"\nSaved {total_count} trajectories to {SAVE_FILE}")
+    print("Coordinates are now correct.")
 
 
 if __name__ == "__main__":
