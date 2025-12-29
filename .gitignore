@@ -125,9 +125,9 @@ celerybeat.pid
 # Environments
 .env
 .venv
-SGE_Transformer/envs/
+
 venv/
-SGE_Transformer/envs/
+
 env.bak/
 venv.bak/
 

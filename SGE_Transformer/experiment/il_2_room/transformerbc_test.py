@@ -305,19 +305,19 @@ def all_train_gpt2_3_mamba2(epoch:int):
     # cols = np.arange(expert_s_array.shape[1])
     # expert_s_one_hot[rows, cols, expert_s_array] = 1.0
 
-    # network = HuggingFaceTransformerBCNetwork(state_dim=state_dim, num_actions=5, d_model=128, num_decoder_layers=3, nhead=8,
-    #                                           max_seq_length=80)
-    # trainer = BCTrainer(network, lr=1e-4, device=device)
-    #
-    # trainer.learn(expert_s_one_hot.tolist(), expert_a, 64, num_epochs=epoch)
-    # trainer.save_model(f'transbc_2_room_198_model/transbc_model_{str(epoch)}.pth')
-
-    network = Mamba2BCNetwork(state_dim=state_dim, num_actions=5, d_model=128, num_decoder_layers=3,
+    network = HuggingFaceTransformerBCNetwork(state_dim=state_dim, num_actions=5, d_model=128, num_decoder_layers=3, nhead=8,
                                               max_seq_length=80)
-    trainer = Mamba2BCTrainer(network, lr=1e-4, device=device)
+    trainer = BCTrainer(network, lr=1e-4, device=device)
 
     trainer.learn(expert_s_one_hot.tolist(), expert_a, 64, num_epochs=epoch)
-    trainer.save_model(f'mamba2bc_2_room_198_model/mamba2bc_model_{str(epoch)}.pth')
+    trainer.save_model(f'transbc_2_room_198_model/transbc_model_{str(epoch)}.pth')
+
+    # network = Mamba2BCNetwork(state_dim=state_dim, num_actions=5, d_model=128, num_decoder_layers=3,
+    #                                           max_seq_length=80)
+    # trainer = Mamba2BCTrainer(network, lr=1e-4, device=device)
+    #
+    # trainer.learn(expert_s_one_hot.tolist(), expert_a, 64, num_epochs=epoch)
+    # trainer.save_model(f'mamba2bc_2_room_198_model/mamba2bc_model_{str(epoch)}.pth')
 
 
 
