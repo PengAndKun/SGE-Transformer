@@ -253,7 +253,7 @@ def main():
     BUDGET = 100000
     REPEATS = 30
     SCORE_THRESHOLD = 99.0
-    SAVE_FILE = "sge_full_state_trajectories_fixed.pkl"  # 改个名字防止混淆
+    SAVE_FILE = "../../data_pybullet/sge_full_state_trajectories_fixed.pkl"  # 改个名字防止混淆
 
     all_data = {}
     total_count = 0
