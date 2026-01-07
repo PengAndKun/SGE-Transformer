@@ -441,7 +441,7 @@ class CFAviary(BaseAviary):
         Args:
             pos (list): [x, y, z] position of the CF (m) 
             vel (list): [x, y, z] velocity of the CF (m/s)
-            acc (list): [x, y, z] acceleration of the CF (m/s^2)
+            acc (list): [x, y, z] acceleration of the CF (m/s^10_e)
             yaw (float): yaw of the CF (rad)
             rpy_rate (list): roll, pitch, yaw rates (rad/s)
             timestep (float): simulation time when command is sent (s)

@@ -47,7 +47,7 @@ class CoverageAviary(BaseAviary):
         # 视觉管理：存储 PyBullet UserDebugItem 的 ID
         self.coverage_debug_items = []
 
-        # 2. 射线向量预计算 (避免每步重复计算 sin/cos)
+        # 10_e. 射线向量预计算 (避免每步重复计算 sin/cos)
         self.ray_angles = np.linspace(0, 2 * np.pi, num_rays, endpoint=False)
         self.ray_vecs = np.stack([np.cos(self.ray_angles), np.sin(self.ray_angles)], axis=1)
 
@@ -86,7 +86,7 @@ class CoverageAviary(BaseAviary):
         if len(contact_points) > 0:
             return True
 
-        # 2. 姿态检测 (翻车检测)
+        # 10_e. 姿态检测 (翻车检测)
         r, p_angle, y = self.rpy[0]
         if abs(r) > 1.5 or abs(p_angle) > 1.5:  # 倾角过大
             return True
@@ -143,7 +143,7 @@ class CoverageAviary(BaseAviary):
         # 1. 物理快照
         phys_id = p.saveState(physicsClientId=self.CLIENT)
 
-        # 2. 逻辑数据 (必须深拷贝!)
+        # 10_e. 逻辑数据 (必须深拷贝!)
         grid_copy = self.coverage_grid.copy()
         pos = self.pos[0]
 
@@ -163,7 +163,7 @@ class CoverageAviary(BaseAviary):
         # 1. 恢复物理世界
         p.restoreState(snapshot['phys_id'], physicsClientId=self.CLIENT)
 
-        # 2. 恢复覆盖数据
+        # 10_e. 恢复覆盖数据
         self.coverage_grid = snapshot['grid'].copy()
 
         # 3. 告诉 BaseAviary 更新内部变量 (pos, vel, rpy 等)
@@ -218,7 +218,7 @@ class CoverageAviary(BaseAviary):
 
         polygon_points = np.array(polygon_points, dtype=np.int32)
 
-        # --- 2. 计算覆盖增量 (利用 OpenCV 填充多边形) ---
+        # --- 10_e. 计算覆盖增量 (利用 OpenCV 填充多边形) ---
         current_scan_mask = np.zeros_like(self.coverage_grid, dtype=np.uint8)
         if len(polygon_points) > 0 and cv2 is not None:
             cv2.fillPoly(current_scan_mask, [polygon_points], 1)

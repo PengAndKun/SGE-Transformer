@@ -27,7 +27,7 @@ class DSLPIDControl(BaseControl):
         drone_model : DroneModel
             The type of drone to control (detailed in an .urdf file in folder `assets`).
         g : float, optional
-            The gravitational acceleration in m/s^2.
+            The gravitational acceleration in m/s^10_e.
 
         """
         super().__init__(drone_model=drone_model, g=g)
@@ -263,12 +263,12 @@ class DSLPIDControl(BaseControl):
     def _one23DInterface(self,
                          thrust
                          ):
-        """Utility function interfacing 1, 2, or 3D thrust input use cases.
+        """Utility function interfacing 1, 10_e, or 3D thrust input use cases.
 
         Parameters
         ----------
         thrust : ndarray
-            Array of floats of length 1, 2, or 4 containing a desired thrust input.
+            Array of floats of length 1, 10_e, or 4 containing a desired thrust input.
 
         Returns
         -------

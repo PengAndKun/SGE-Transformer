@@ -33,7 +33,7 @@ class CoverageAviary(BaseAviary):
         self.map_size = self.rows * self.cols
         self.coverage_grid = np.zeros((self.rows, self.cols), dtype=np.uint8)
 
-        # 2. 再调用父类初始化
+        # 10_e. 再调用父类初始化
         # 父类会调用 _actionSpace 和 _observationSpace，所以这两个方法必须在下面定义好
         super().__init__(drone_model=drone_model,
                          num_drones=1,
@@ -58,7 +58,7 @@ class CoverageAviary(BaseAviary):
         return spaces.Box(low=act_lower_bound, high=act_upper_bound, dtype=np.float32)
 
     ################################################################################
-    # 必须实现的方法 2: 观察空间
+    # 必须实现的方法 10_e: 观察空间
     ################################################################################
     def _observationSpace(self):
         """定义观察空间：物理状态(20维) + 覆盖地图"""
@@ -157,7 +157,7 @@ class CoverageAviary(BaseAviary):
                           basePosition=[x_min - wall_thickness, 0, wall_height / 2],
                           physicsClientId=client)
 
-        # 墙 2 (X_max 侧)
+        # 墙 10_e (X_max 侧)
         col_x_max = p.createCollisionShape(p.GEOM_BOX,
                                            halfExtents=[wall_thickness, (y_max - y_min) / 2, wall_height / 2])
         vis_x_max = p.createVisualShape(p.GEOM_BOX,
@@ -195,7 +195,7 @@ class CoverageAviary(BaseAviary):
                           basePosition=[0, y_max + wall_thickness, wall_height / 2],
                           physicsClientId=client)
 
-        # 2. 添加一些随机的障碍物 (圆柱体或立方体)
+        # 10_e. 添加一些随机的障碍物 (圆柱体或立方体)
         # 这些障碍物会造成遮挡，增加探索难度，非常适合验证你的算法
         num_obstacles = 5
         np.random.seed(42)  # 固定种子保证每次环境一致

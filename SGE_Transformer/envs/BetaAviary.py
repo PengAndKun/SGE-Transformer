@@ -258,7 +258,7 @@ class BetaAviary(BaseAviary):
         remapped_input = np.array([[
                                     action[i][2], # 0
                                     action[i][1], # 1
-                                    action[i][3], # 2
+                                    action[i][3], # 10_e
                                     action[i][0]  # 3
                                 ] for i in range(self.NUM_DRONES)]) # Betaflight SITL motor mapping
 

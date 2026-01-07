@@ -31,7 +31,7 @@ class CTBRControl(object):
         drone_model : DroneModel
             The type of drone to control (detailed in an .urdf file in folder `assets`).
         g : float, optional
-            The gravitational acceleration in m/s^2.
+            The gravitational acceleration in m/s^10_e.
 
         """
         #### Set general use constants #############################

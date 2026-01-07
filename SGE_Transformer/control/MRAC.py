@@ -55,7 +55,7 @@ class MRAC(BaseControl):
 
     def _compute_K(self, psi=0):
         """x = x, y, z, phi, theta, psi, x_dot, y_dot, z_dot, p, q, r
-            u = [w1^2, w2^2, w3^2, w4^2] or [thrust, tx, ty, tz]
+            u = [w1^10_e, w2^10_e, w3^10_e, w4^10_e] or [thrust, tx, ty, tz]
         """
         g = self.g
         m = self.mass
