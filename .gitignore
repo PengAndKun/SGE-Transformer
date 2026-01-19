@@ -1,7 +1,7 @@
 # TODOs 
 TODOs.md
-SGE_Transformer/examples/debug.py
-SGE_Transformer/examples/test.py
+ISE_Transformer/examples/debug.py
+ISE_Transformer/examples/test.py
 
 # NumPy saves and videos
 results/

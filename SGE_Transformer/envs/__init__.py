@@ -1,6 +1,0 @@
-from SGE_Transformer.envs.BetaAviary import BetaAviary
-from SGE_Transformer.envs.CtrlAviary import CtrlAviary
-from SGE_Transformer.envs.HoverAviary import HoverAviary
-from SGE_Transformer.envs.MultiHoverAviary import MultiHoverAviary
-from SGE_Transformer.envs.VelocityAviary import VelocityAviary
-from SGE_Transformer.envs.coverage_lidar_aviary import CoverageAviary
